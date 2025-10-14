@@ -28,4 +28,7 @@ papka anuny UNO diploma
 quit are your sure
 amen ej petq a unena back
 
-rules in modal popup
+1. rules in modal popup
+2. main game page
+2.1. show game details (player count, complexity, etc...)
+3. exit button in main game page (Are you sure?)
