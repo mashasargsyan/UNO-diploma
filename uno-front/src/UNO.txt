@@ -1,0 +1,31 @@
+UNO
+---
+min - 2 players (special rules)
+max - 10 players
+card count - 108
+
+1. 19 cards of each color (Red, Green, Blue, Yellow)
+Numbers 0–9 (one 0, two each of 1–9)
+2. 8 Skip cards (2 per color)
+3. 8 Reverse cards (2 per color)
+4. 8 Draw Two cards (2 per color)
+5. 4 Wild cards
+6. 4 Wild Draw Four cards
+
+1 card -> uno, otherwise get 2 cards
+no step -> get 1 card
+AI helper to suggest a best move
+
+---
+complexity levels: easy(Random)/hard(Math)/AI (etc.)
+
+// 1. Math modeling (game theory) OR use AI
+// 2. Design (sketch) - use/play real games on internet
+
+
+
+papka anuny UNO diploma
+quit are your sure
+amen ej petq a unena back
+
+rules in modal popup
