@@ -1,44 +1,66 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-export default function FirstPage(){
-    const navigate = useNavigate();
-    const [showRules, setShowRules] = useState(false);
+import "./index.css"; 
 
-     const handleShowRules = () => {
-    if (!showRules) setShowRules(true); 
-     }
+export default function FirstPage() {
+  const navigate = useNavigate();
+  const [showRules, setShowRules] = useState(false);
+  const [ruleIndex, setRuleIndex] = useState(0);
 
-    return(
-        <div className="UnoForm">
-            <div class="title">UNO</div>
-            <div>
-                <button onClick={() => navigate("/UnoForm")}>GAME</button>
-            </div>
-            
+  const rules = [
+    "Each player gets 7 cards",
+    "Play a card that matches the color, number, or symbol",
+    "The first person to get rid of all their cards wins.",
+    "When you have 1 card left, say UNO",
+  ];
+
+  const handleShowRules = () => {
+    setShowRules(true);
+    setRuleIndex(0);
+  };
+
+  const handleNext = () => {
+    if (ruleIndex < rules.length - 1) {
+      setRuleIndex(ruleIndex + 1);
+    } else {
+      setShowRules(false);
+      setRuleIndex(0);
+    }
+  };
+
+  const handlePrev = () => {
+    if (ruleIndex > 0) setRuleIndex(ruleIndex - 1);
+  };
+
+  return (
+    <div className="UnoForm">
+      <div className="title">UNO</div>
+
+      <div>
+        <button onClick={() => navigate("/UnoForm")}>GAME</button>
+      </div>
+
       <div>
         <button onClick={handleShowRules}>RULES</button>
       </div>
-                  
-         {showRules && (
-        <div className="rules-text" style={{ marginTop: "15px", textAlign: "left" }}>
-          <h6>
-            <div>There are 108 cards.</div>         
-            Each player is dealt 7 cards. <br />
-            You must play a card matching the color, number, or symbol of the first card in the DISCARD pile. The gameplay then continues to the next player. <br />
-            Flip the top card from the draw pile to start the discard pile. <br />
-            Match cards by color or number. <br />
-            Remember to say “Uno!” when you have one card left. The game continues until someone has one card and declares, “Uno!“.
-          </h6>
 
-          <button
-            onClick={() => setShowRules(false)}
-            style={{ marginTop: "10px" }}>
-            QUIT
-          </button>
+      {showRules && (
+        <div className="modal" onClick={() => setShowRules(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Rules</h3>
+            <p>{rules[ruleIndex]}</p>
+
+            <div className="modal-buttons">
+              <button onClick={handlePrev} disabled={ruleIndex === 0}>
+                ← PREV
+              </button>
+              <button onClick={handleNext}>
+                {ruleIndex === rules.length - 1 ? "CLOSE" : "NEXT →"}
+              </button>
+            </div>
+          </div>
         </div>
-
       )}
-        </div>
-    );
-    
+    </div>
+  );
 }
