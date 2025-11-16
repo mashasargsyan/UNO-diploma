@@ -58,7 +58,7 @@ export default function UnoForm({ onClick }) {
       </div>
 
   <div>
-    <button onClick={() => navigate("")}>Start</button>
+    <button onClick={() => navigate("/Game")}>Start</button>
   </div>
 
   <div>
