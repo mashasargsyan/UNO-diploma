@@ -30,6 +30,6 @@ amen ej petq a unena back
 
 1. rules in modal popup +
 2. main game page   +    
-2.1. show game details (player count, complexity, etc...)
+2.1. show game details (player count, complexity, etc...) +
 2.2. draw circle and divide by {player count} with equal sectors (player always on bottom)
 3. exit button in main game page (Are you sure?)

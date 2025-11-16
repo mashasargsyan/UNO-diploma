@@ -20,14 +20,14 @@ export default function UnoForm({ onClick }) {
           onChange={(e) => setName(e.target.value)}
         />
 
-        <div className="sub-title">Difficulty:</div>
+        <div className="sub-title">Complexity:</div>
         <div className="difficulty">
           <label>
             <input
               type="radio"
               name="level"
-              value="easy"
-              checked={difficulty === "easy"}
+              value="Easy"
+              checked={difficulty === "Easy"}
               onChange={(e) => setDifficulty(e.target.value)}
             />
             Easy
@@ -37,8 +37,8 @@ export default function UnoForm({ onClick }) {
             <input
               type="radio"
               name="level"
-              value="hard"
-              checked={difficulty === "hard"}
+              value="Hard"
+              checked={difficulty === "Hard"}
               onChange={(e) => setDifficulty(e.target.value)}
             />
             Hard
@@ -58,7 +58,19 @@ export default function UnoForm({ onClick }) {
       </div>
 
   <div>
-    <button onClick={() => navigate("/Game")}>Start</button>
+    <button
+  onClick={() =>
+    navigate("/Game", {
+      state: {
+        players,
+        difficulty,
+        name,
+      },
+    })
+  }
+>
+  Start
+</button>
   </div>
 
   <div>
