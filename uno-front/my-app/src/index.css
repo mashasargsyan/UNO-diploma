@@ -24,7 +24,7 @@ code {
 
 .title {
   font-size: 2.5em;
-  font-weight: bold;
+  font-weight: bold; 
   margin-bottom: 10px;
   color: #000000;
   text-decoration: underline;
@@ -86,14 +86,14 @@ button {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 
-.GameDetails {
+ .GameDetails {
   position: absolute;
   top: 10px;
-  left: 10px;
+  left: 20px;
   padding: 10px 15px;
   border-radius: 8px;
   font-size: 14px;
   line-height: 1.4;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-}
+} 
 
