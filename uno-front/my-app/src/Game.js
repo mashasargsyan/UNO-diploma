@@ -1,4 +1,4 @@
-
+import Circle from "./Circle";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -29,10 +29,23 @@ export default function Game() {
           <button onClick={handleShowExit}>Exit</button>
         </div>
       </div>
+
+      <div className="GameDetails">
+  <p><strong>Name:</strong> {name}</p>
+  <p><strong>Player count:</strong> {players}</p>
+  <p><strong>Complexity:</strong> {difficulty}</p>
+
+  <div>
+    <button onClick={handleShowExit}>Exit</button>
+  </div>
+</div>
+
+<Circle players={players} />
+
  
      {showExit && (
-        <div className="modal" onClick={() => setShowExit(false)}>   
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal">   
+          <div className="modal-content">
             <h3>Are you sure?</h3>
             
             <div className="modal-buttons">

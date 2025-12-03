@@ -5,13 +5,14 @@ export default function UnoForm({ onClick }) {
   const navigate = useNavigate();
 
   const [players, setPlayers] = useState(2);
-  const [difficulty, setDifficulty] = useState("easy");
+  const [difficulty, setDifficulty] = useState("Easy");  
   const [name, setName] = useState("");
 
   return (
     <div className="UnoForm">
       <div className="Text">
         <div className="title">UNO</div>
+
         <div className="sub-title">Name:</div>
         <input
           id="PlayerName"
@@ -21,6 +22,7 @@ export default function UnoForm({ onClick }) {
         />
 
         <div className="sub-title">Complexity:</div>
+
         <div className="difficulty">
           <label>
             <input
@@ -57,26 +59,25 @@ export default function UnoForm({ onClick }) {
         />
       </div>
 
-  <div>
-    <button
-  onClick={() =>
-    navigate("/Game", {
-      state: {
-        players,
-        difficulty,
-        name,
-      },
-    })
-  }
->
-  Start
-</button>
-  </div>
+      <div>
+        <button
+          onClick={() =>
+            navigate("/Game", {
+              state: {
+                players,
+                difficulty,
+                name,
+              },
+            })
+          }
+        >
+          Start
+        </button>
+      </div>
 
-  <div>
-      <button onClick={() => navigate("/")}>Back</button>
-  </div> 
-      
+      <div>
+        <button onClick={() => navigate("/")}>Back</button>
+      </div>
     </div>
   );
 }
