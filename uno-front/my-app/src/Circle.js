@@ -11,7 +11,7 @@ export default function Circle({ players }) {
     if (!parent) return;
 
 
-    const size = parent.offsetWidth;
+    const size = 450;
     canvas.width = size;
     canvas.height = size;
 
@@ -45,9 +45,25 @@ export default function Circle({ players }) {
     }
   }, [players]);
 
-  return (
-    <div className="UnoForm">
-      <canvas ref={canvasRef} style={{ display: "block", width: "100%", height: "auto" }} />
+   return (
+    <div
+      style={{
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <canvas
+        ref={canvasRef}
+        style={{
+          display: "block",
+          width: "450px",
+          height: "450px",
+        }}
+      />
     </div>
   );
 }
+
