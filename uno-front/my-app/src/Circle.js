@@ -1,17 +1,24 @@
 import React, { useEffect, useRef } from "react";
+import { useMemo } from "react";
+import { useLocation } from "react-router-dom";
 
-export default function Circle({ players }) {
+export default function Circle() {
   const canvasRef = useRef();
+  const location = useLocation();
+  const { name, playersCount } = location.state || { name: "Player 1", playersCount: 2 };
+
+ const players = useMemo(() => {
+  return Array.from({ length: playersCount }, (_, i) => ({
+    name: i === 0 ? name : `Player ${i + 1}`,
+    id: i
+  }));
+}, [name, playersCount]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const parent = canvas.parentElement;
-    if (!parent) return;
-
-
-    const size = 450;
+    const size = 600;
     canvas.width = size;
     canvas.height = size;
 
@@ -20,32 +27,42 @@ export default function Circle({ players }) {
 
     const cx = size / 2;
     const cy = size / 2;
+    const R = size * 0.35;
+    const r = 25;
 
-    const R = size * 0.4;
-    const r = size * 0.06;
-
-    const N = Math.max(2, Math.floor(players));
-    const step = (2 * Math.PI) / N;
+    const step = (2 * Math.PI) / players.length;
     const myAngle = Math.PI / 2;
 
     ctx.beginPath();
     ctx.arc(cx, cy, R, 0, Math.PI * 2);
-    ctx.strokeStyle = "#000000ff";
+    ctx.strokeStyle = "#e0e0e0";
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    for (let i = 0; i < N; i++) {
+    players.forEach((player, i) => {
       const angle = myAngle + step * i;
       const x = cx + R * Math.cos(angle);
       const y = cy + R * Math.sin(angle);
 
       ctx.beginPath();
       ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.strokeStyle = "#333";
+      ctx.lineWidth = 3;
       ctx.stroke();
-    }
+
+      const labelDist = R + r + 30;
+      const lx = cx + labelDist * Math.cos(angle);
+      const ly = cy + labelDist * Math.sin(angle);
+
+      ctx.font = "bold 14px Arial";
+      ctx.fillStyle = "#000";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(player.name, lx, ly);
+    });
   }, [players]);
 
-   return (
+  return (
     <div
       style={{
         width: "100%",
@@ -53,17 +70,10 @@ export default function Circle({ players }) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "#fff"
       }}
     >
-      <canvas
-        ref={canvasRef}
-        style={{
-          display: "block",
-          width: "450px",
-          height: "450px",
-        }}
-      />
+      <canvas ref={canvasRef} style={{ maxWidth: "90vw", maxHeight: "90vh" }} />
     </div>
   );
 }
-

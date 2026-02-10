@@ -8,7 +8,13 @@ export default function Game() {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const players = state?.players || 2;
+  const players = new Array(state?.playersCount || 2);
+  for (let i = 0; i < players.length; i++) {
+      players[i] = {
+        name: i === 0 ? state.name : "Player " + i, 
+      };
+    
+  }
   const difficulty = state?.difficulty || "Easy";
   const name = state?.name || "John Doe";
 
@@ -23,22 +29,12 @@ export default function Game() {
 
       <div className="GameDetails">
         <p><strong>Name:</strong> {name}</p>
-        <p><strong>Player count:</strong> {players}</p>
+        <p><strong>Player count:</strong> {players.length}</p>
         <p><strong>Complexity:</strong> {difficulty}</p>
         <div>
           <button onClick={handleShowExit}>Exit</button>
         </div>
       </div>
-
-      <div className="GameDetails">
-  <p><strong>Name:</strong> {name}</p>
-  <p><strong>Player count:</strong> {players}</p>
-  <p><strong>Complexity:</strong> {difficulty}</p>
-
-  <div>
-    <button onClick={handleShowExit}>Exit</button>
-  </div>
-</div>
 
 <Circle players={players} />
 

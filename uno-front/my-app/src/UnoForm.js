@@ -1,28 +1,37 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-export default function UnoForm({ onClick }) {
+export default function UnoForm() {
   const navigate = useNavigate();
-
-  const [players, setPlayers] = useState(2);
-  const [difficulty, setDifficulty] = useState("Easy");  
+  const [playersCount, setPlayers] = useState(2);
+  const [difficulty, setDifficulty] = useState("Easy");
   const [name, setName] = useState("");
+
+  const handleStart = () => {
+    navigate("/Game", {
+      state: {
+        playersCount,
+        difficulty,
+        name: name.trim() || "John Doe",
+      },
+    });
+  };
 
   return (
     <div className="UnoForm">
       <div className="Text">
         <div className="title">UNO</div>
-
         <div className="sub-title">Name:</div>
         <input
           id="PlayerName"
+          type="text"
           placeholder="John Doe"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          style={{ width: "150px", height: "25px", textAlign: "center" }}
         />
 
         <div className="sub-title">Complexity:</div>
-
         <div className="difficulty">
           <label>
             <input
@@ -34,7 +43,6 @@ export default function UnoForm({ onClick }) {
             />
             Easy
           </label>
-
           <label>
             <input
               type="radio"
@@ -51,32 +59,17 @@ export default function UnoForm({ onClick }) {
         <input
           type="number"
           id="players"
-          name="players"
           min="2"
           max="10"
-          value={players}
+          value={playersCount}
           onChange={(e) => setPlayers(Number(e.target.value))}
+          style={{ width: "50px" }}
         />
       </div>
 
-      <div>
-        <button
-          onClick={() =>
-            navigate("/Game", {
-              state: {
-                players,
-                difficulty,
-                name,
-              },
-            })
-          }
-        >
-          Start
-        </button>
-      </div>
-
-      <div>
-        <button onClick={() => navigate("/")}>Back</button>
+      <div style={{ marginTop: "20px" }}>
+        <button onClick={handleStart}>Start</button>
+        <button onClick={() => navigate("/")} style={{ marginLeft: "10px" }}>Back</button>
       </div>
     </div>
   );
