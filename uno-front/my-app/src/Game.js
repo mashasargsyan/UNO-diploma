@@ -1,12 +1,18 @@
 import Circle from "./Circle";
+import { Deck } from "./Deck";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { useState } from "react";
 
 export default function Game() {
   const [showExit, setShowExit] = useState(false);
   const { state } = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    Deck();
+  }, []);
 
   const players = new Array(state?.playersCount || 2);
   for (let i = 0; i < players.length; i++) {

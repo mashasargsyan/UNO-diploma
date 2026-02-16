@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 export default function Circle() {
   const canvasRef = useRef();
   const location = useLocation();
-  const { name, playersCount } = location.state || { name: "Player 1", playersCount: 2 };
+  const { name, playersCount } = location.state 
 
  const players = useMemo(() => {
   return Array.from({ length: playersCount }, (_, i) => ({
