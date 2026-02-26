@@ -17,52 +17,81 @@ export const Deck = () => {
     wildDraw: 14
   };
 
-  const cardValues = {
-    zero: 0,
-    one: 1,
-    two: 2,
-    three: 3,
-    four: 4,
-    five: 5,
-    six: 6,
-    seven: 7,
-    eight: 8,
-    nine: 9,
-    skip: 20,
-    reverse: 20,
-    draw: 20,
-    wild: 50,
-    wildDraw: 50
+  const cardColors = {
+    red: 0,
+    yellow: 1,
+    green: 2,
+    blue: 3,
+    black: 4 
   };
 
-  const deck = [];
+  function createDeck() {
+    const cards = [];
 
-  for (let color = 0; color <= 3; color++) {
-    deck.push({
-      type: cardTypes.zero,
-      color,
-      score: cardValues.zero
-    });
+    for (let color in cardColors) {
+      if (color === "black") continue; 
 
-    for (let number = 1; number <= 9; number++) {
-      deck.push({ type: number, color, score: number });
-      deck.push({ type: number, color, score: number });
+      const colorValue = cardColors[color];
+
+      cards.push({
+        type: cardTypes.zero,
+        color: colorValue
+      });
+
+      for (let num = 1; num <= 9; num++) {
+        for (let i = 0; i < 2; i++) {
+          cards.push({
+            type: num,
+            color: colorValue
+          });
+        }
+      }
+
+      for (let i = 0; i < 2; i++) {
+        cards.push({ type: cardTypes.skip, color: colorValue });
+        cards.push({ type: cardTypes.reverse, color: colorValue });
+        cards.push({ type: cardTypes.draw, color: colorValue });
+      }
     }
 
-    for (let i = 0; i < 2; i++) {
-      deck.push({ type: cardTypes.skip, color, score: 20 });
-      deck.push({ type: cardTypes.reverse, color, score: 20 });
-      deck.push({ type: cardTypes.draw, color, score: 20 });
+    for (let i = 0; i < 4; i++) {
+      cards.push({
+        type: cardTypes.wild,
+        color: cardColors.black
+      });
+
+      cards.push({
+        type: cardTypes.wildDraw,
+        color: cardColors.black
+      });
     }
+
+    return cards;
   }
 
-  for (let i = 0; i < 4; i++) {
-    deck.push({ type: cardTypes.wild, color: 4, score: 50 });
-    deck.push({ type: cardTypes.wildDraw, color: 4, score: 50 });
+  
+  function shuffle(array) {
+    let shuffled = [...array]; // Ստեղծում ենք պատճեն, որպեսզի օրիգինալը պահպանվի
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      // Տեղերով փոխում ենք i և j էլեմենտները
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
   }
 
-  console.log("Number of Cards", deck.length);
-  console.log(deck);
+ 
+  const deck = createDeck();
+  
+  
+  console.log("Total cards:", deck.length); 
+  console.log("Original Deck:", [...deck]);
 
-  return deck;
+  
+  const shuffledDeck = shuffle(deck);
+  
+ 
+  console.log("Shuffled Deck:", shuffledDeck);
+
+    return shuffledDeck;
 };

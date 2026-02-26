@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #2b2b2b;
 }
 
 code {
@@ -12,57 +13,113 @@ code {
     monospace;
 }
 
-
-  .UnoForm {
-  display: flex;
-  flex-direction: column; 
-  text-align: center;
-  max-width: 200px;
-  margin: 0 auto;
+.GamePage {
+  background-color: #2e8b57;
+  min-height: 100vh;
+  width: 100vw;
   padding: 20px;
- }
+  color: white;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.GameDetails {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.player-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  object-fit: cover;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+}
+
+.UnoForm {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  max-width: 300px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
 .title {
-  font-size: 2.5em;
-  font-weight: bold; 
-  margin-bottom: 10px;
-  color: #000000;
-  text-decoration: underline;
+  font-size: 3em;
+  font-weight: bold;
+  margin-bottom: 20px;
   text-align: center;
+  text-decoration: none;
+  font-family: 'Arial Black', sans-serif;
 }
 
 .sub-title {
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 15px;
   margin-bottom: 5px;
   text-align: left;
 }
 
 input[type="text"],
 input[type="number"] {
-  
-   width: 30px;   
-  height: 25px;  
-  font-size: 14px; 
+  width: 100%;
+  height: 35px;
+  font-size: 16px;
   margin-bottom: 10px;
-  
+  padding: 5px;
+  box-sizing: border-box;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.difficulty {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 15px;
 }
 
 .difficulty label {
   font-weight: normal;
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  cursor: pointer;
 }
 
 .difficulty input[type="radio"] {
-  margin-right: 10px;
-  
+  margin-right: 5px;
 }
 
 button {
-    text-align: center;
+  text-align: center;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #ff5555;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background 0.3s;
+  margin: 10px 0;
+}
 
+button:hover {
+  background-color: #cc0000;
 }
 
 .modal {
@@ -71,10 +128,11 @@ button {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal-content {
@@ -83,17 +141,12 @@ button {
   border-radius: 15px;
   width: 400px;
   text-align: center;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  color: black;
 }
 
- .GameDetails {
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  padding: 10px 15px;
-  border-radius: 8px;
-  font-size: 14px;
-  line-height: 1.4;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-} 
-
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
