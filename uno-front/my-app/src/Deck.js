@@ -21,17 +21,13 @@ export const Deck = () => {
     red: 0,
     yellow: 1,
     green: 2,
-    blue: 3,
-    black: 4 
+    blue: 3
   };
-
  
   function createDeck() {
     const cards = [];
 
     for (let color in cardColors) {
-      if (color === "black") continue; 
-
       const colorValue = cardColors[color];
 
       cards.push({ type: cardTypes.zero, color: colorValue });
@@ -48,16 +44,14 @@ export const Deck = () => {
         cards.push({ type: cardTypes.draw, color: colorValue });
       }
     }
-
    
     for (let i = 0; i < 4; i++) {
-      cards.push({ type: cardTypes.wild, color: 4, score: 50 });
-      cards.push({ type: cardTypes.wildDraw, color: 4, score: 50 });
+      cards.push({ type: cardTypes.wild, score: 50 });
+      cards.push({ type: cardTypes.wildDraw, score: 50 });
     }
 
     return cards;
   }
-
  
   function shuffle(array) {
     let shuffled = [...array];

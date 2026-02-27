@@ -3,7 +3,7 @@ import { Deck } from "./Deck";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const botNames = ["Max", "Leo", "Mia", "Sam", "Zoe", "Bob", "Tom", "Nia", "Rex"];
+const playerNames = ["Max", "Leo", "Mia", "Sam", "Zoe", "Bob", "Tom", "Nia", "Rex"];
 const playerColors = ["#FF5733", "#33FF57", "#3357FF", "#F3FF33", "#FF33A8", "#33FFF3", "#FFA833", "#A833FF", "#A8FF33", "#FF8C00"];
 
 export default function Game() {
@@ -23,7 +23,7 @@ export default function Game() {
   for (let i = 0; i < playersCount; i++) {
     players.push({
       id: i,
-      name: i === 0 ? name : botNames[i - 1],
+      name: i === 0 ? name : playerNames[i - 1],
       avatar: `/icons/${i + 1}.jpg`,
       color: playerColors[i]
     });
