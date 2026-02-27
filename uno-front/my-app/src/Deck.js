@@ -25,6 +25,7 @@ export const Deck = () => {
     black: 4 
   };
 
+ 
   function createDeck() {
     const cards = [];
 
@@ -33,17 +34,11 @@ export const Deck = () => {
 
       const colorValue = cardColors[color];
 
-      cards.push({
-        type: cardTypes.zero,
-        color: colorValue
-      });
+      cards.push({ type: cardTypes.zero, color: colorValue });
 
       for (let num = 1; num <= 9; num++) {
         for (let i = 0; i < 2; i++) {
-          cards.push({
-            type: num,
-            color: colorValue
-          });
+          cards.push({ type: num, color: colorValue });
         }
       }
 
@@ -54,44 +49,30 @@ export const Deck = () => {
       }
     }
 
+   
     for (let i = 0; i < 4; i++) {
-      cards.push({
-        type: cardTypes.wild,
-        color: cardColors.black
-      });
-
-      cards.push({
-        type: cardTypes.wildDraw,
-        color: cardColors.black
-      });
+      cards.push({ type: cardTypes.wild, color: 4, score: 50 });
+      cards.push({ type: cardTypes.wildDraw, color: 4, score: 50 });
     }
 
     return cards;
   }
 
-  
+ 
   function shuffle(array) {
-    let shuffled = [...array]; // Ստեղծում ենք պատճեն, որպեսզի օրիգինալը պահպանվի
+    let shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      // Տեղերով փոխում ենք i և j էլեմենտները
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     return shuffled;
   }
 
- 
   const deck = createDeck();
-  
-  
-  console.log("Total cards:", deck.length); 
   console.log("Original Deck:", [...deck]);
 
-  
   const shuffledDeck = shuffle(deck);
-  
- 
   console.log("Shuffled Deck:", shuffledDeck);
 
-    return shuffledDeck;
+  return shuffledDeck;
 };
