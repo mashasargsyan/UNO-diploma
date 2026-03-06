@@ -3,8 +3,7 @@ import { Deck } from "./Deck";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const playerNames = ["Max", "Leo", "Mia", "Sam", "Zoe", "Bob", "Tom", "Nia", "Rex"];
-const playerColors = ["#FF5733", "#33FF57", "#3357FF", "#F3FF33", "#FF33A8", "#33FFF3", "#FFA833", "#A833FF", "#A8FF33", "#FF8C00"];
+const botNames = ["Max", "Leo", "Mia", "Sam", "Zoe", "Bob", "Tom", "Nia", "Rex"];
 
 export default function Game() {
   const [showExit, setShowExit] = useState(false);
@@ -15,41 +14,83 @@ export default function Game() {
   const name = state?.name || "Player 1";
   const playersCount = state?.playersCount || 2;
 
+  const [gameState, setGameState] = useState("dealing");
+  
+  const [playerCards, setPlayerCards] = useState({});
+  const [drawPile, setDrawPile] = useState([]);
+  const [discardPile, setDiscardPile] = useState([]);
+  const [currentPlayer, setCurrentPlayer] = useState(0);
+  const [direction, setDirection] = useState(1);
+
   useEffect(() => {
-    const deck = Deck();
-  }, []);
+    const fullDeck = Deck() || [];
+    if (fullDeck.length === 0) return;
+
+    let currentDeck = [...fullDeck];
+    let initialPlayerCards = {};
+    for (let i = 0; i < playersCount; i++) {
+      initialPlayerCards[i] = [];
+    }
+
+    for (let j = 0; j < 7; j++) {
+      for (let i = 0; i < playersCount; i++) {
+        if (currentDeck.length > 0) {
+          initialPlayerCards[i].push(currentDeck.pop());
+        }
+      }
+    }
+
+    const firstDiscardCard = currentDeck.pop();
+
+    setPlayerCards(initialPlayerCards);
+    setDiscardPile(firstDiscardCard ? [firstDiscardCard] : []);
+    setDrawPile(currentDeck);
+    setGameState("playing");
+  }, [playersCount]);
+
+  const playCard = (playerIndex, cardIndex) => {
+    if (gameState !== "playing" || playerIndex !== currentPlayer) return;
+
+    let newPlayerCards = { ...playerCards };
+    let currentHand = [...newPlayerCards[playerIndex]];
+
+    const [playedCard] = currentHand.splice(cardIndex, 1);
+    newPlayerCards[playerIndex] = currentHand;
+
+    setPlayerCards(newPlayerCards);
+    setDiscardPile(prev => [...prev, playedCard]);
+
+    let nextPlayer = (currentPlayer + direction) % playersCount;
+    if (nextPlayer < 0) nextPlayer += playersCount;
+    setCurrentPlayer(nextPlayer);
+  };
 
   const players = [];
   for (let i = 0; i < playersCount; i++) {
     players.push({
       id: i,
-      name: i === 0 ? name : playerNames[i - 1],
+      name: i === 0 ? name : botNames[i - 1],
       avatar: `/icons/${i + 1}.jpg`,
-      color: playerColors[i]
+      color: "#007BFF"
     });
   }
 
-  const handleShowExit = () => {
-    setShowExit(true);
-  };
-
+  console.log("PlayerCards:", playerCards);
+  console.log("DiscardPile:", discardPile);
+  
   return (
     <div className="GamePage">
       <div className="title">UNO</div>
-
       <div className="GameDetails">
         <p><strong>Name:</strong> {name}</p>
-        <p><strong>Player count:</strong> {players.length}</p>
-        <p><strong>Complexity:</strong> {difficulty}</p>
-        <div>
-          <button onClick={handleShowExit}>Exit</button>
-        </div>
+        <p><strong>State:</strong> {gameState}</p>
+        <div><button onClick={() => setShowExit(true)}>Exit</button></div>
       </div>
 
-      <Circle players={players} />
+      <Circle players={players} currentPlayer={currentPlayer} direction={direction} />
 
       {showExit && (
-        <div className="modal">   
+        <div className="modal">
           <div className="modal-content">
             <h3>Are you sure?</h3>
             <div className="modal-buttons">
@@ -58,7 +99,7 @@ export default function Game() {
             </div>
           </div>
         </div>
-      )} 
+      )}
     </div>
   );
 }

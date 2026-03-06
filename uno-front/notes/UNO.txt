@@ -34,10 +34,10 @@ amen ej petq a unena back
 2.2. draw circle and divide by {player count} with equal sectors (player always on bottom) +
 3. exit button in main game page (Are you sure?) +
 
-bolory unenan scorer, nuynisk tvery 
-hert (index), uxxutyun, cardery bajanel popov amen angam araayi mej playeri
-array splice pop
-ov e sksum xaxy
-ramken sarqel dexin ete ed mardu xaxalu ehrtn a
-slaq uxxutyamb
+ 
+hert (index), uxxutyun, cardery bajanel popov amen angam araayi mej playeri+
+array splice pop+
+ov e sksum xaxy+
+ramken sarqel dexin ete ed mardu xaxalu ehrtn a+
+slaq uxxutyamb+
 state yntacik xaxi

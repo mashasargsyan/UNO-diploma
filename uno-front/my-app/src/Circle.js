@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-export default function Circle({ players }) {
+export default function Circle({ players, currentPlayer, direction }) {
   const canvasRef = useRef();
 
   useEffect(() => {
@@ -29,6 +29,35 @@ export default function Circle({ players }) {
 
     if (!players || players.length === 0) return;
 
+    const arrowRadius = R + r + 45;
+    ctx.beginPath();
+    ctx.arc(cx, cy, arrowRadius, -Math.PI / 2 - 0.3, -Math.PI / 2 + 0.3);
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.stroke();
+
+    const headAngle = direction === 1 ? -Math.PI / 2 + 0.3 : -Math.PI / 2 - 0.3;
+    const headX = cx + arrowRadius * Math.cos(headAngle);
+    const headY = cy + arrowRadius * Math.sin(headAngle);
+
+    const alpha = Math.PI / 6;
+    const len = 15;
+    const lineAngle1 = headAngle - direction * Math.PI / 2 + alpha;
+    const lineAngle2 = headAngle - direction * Math.PI / 2 - alpha;
+
+    ctx.beginPath();
+    ctx.moveTo(
+      headX + len * Math.cos(lineAngle1),
+      headY + len * Math.sin(lineAngle1)
+    );
+    ctx.lineTo(headX, headY);
+    ctx.lineTo(
+      headX + len * Math.cos(lineAngle2),
+      headY + len * Math.sin(lineAngle2)
+    );
+    ctx.stroke();
+
     const step = (2 * Math.PI) / players.length;
     const startAngle = Math.PI / 2;
 
@@ -54,11 +83,11 @@ export default function Circle({ players }) {
 
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.strokeStyle = player.color;
-        ctx.lineWidth = 4;
+        ctx.strokeStyle = i === currentPlayer ? "#FFFF00" : player.color;
+        ctx.lineWidth = i === currentPlayer ? 6 : 4;
         ctx.stroke();
 
-        const labelDist = R + r + 35;
+        const labelDist = R + r + 20;
         const lx = cx + labelDist * Math.cos(angle);
         const ly = cy + labelDist * Math.sin(angle);
 
@@ -69,18 +98,10 @@ export default function Circle({ players }) {
         ctx.fillText(player.name, lx, ly);
       };
     });
-  }, [players]);
+  }, [players, currentPlayer, direction]);
 
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: "-10px"
-      }}
-    >
+    <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "-10px" }}>
       <canvas ref={canvasRef} style={{ maxWidth: "90vw", maxHeight: "75vh" }} />
     </div>
   );

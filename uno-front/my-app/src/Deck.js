@@ -46,8 +46,8 @@ export const Deck = () => {
     }
    
     for (let i = 0; i < 4; i++) {
-      cards.push({ type: cardTypes.wild, score: 50 });
-      cards.push({ type: cardTypes.wildDraw, score: 50 });
+      cards.push({ type: cardTypes.wild});
+      cards.push({ type: cardTypes.wildDraw});
     }
 
     return cards;
