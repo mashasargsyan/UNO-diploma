@@ -13,7 +13,6 @@ code {
     monospace;
 }
 
-/* --- ՍԿԶԲՆԱԿԱՆ ԷՋԵՐԻ (FORM) ԴԻԶԱՅՆԸ --- */
 .UnoForm {
   display: flex;
   flex-direction: column;
@@ -92,7 +91,6 @@ button:hover {
   background-color: #cc0000;
 }
 
-/* --- ԲՈՒՆ ԽԱՂԻ ԷՋԻ (GAME.JS) ԴԻԶԱՅՆԸ --- */
 .GamePage {
   background-color: #2e8b57;
   height: 100vh;
@@ -195,17 +193,39 @@ button:hover {
   font-size: 14px; 
   color: black;
   border-radius: 5px;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
-  transition: transform 0.2s; 
-}
-
-.uno-card:hover {
-  transform: translateY(-8px);
 }
 
 .uno-card span:last-child {
   align-self: flex-end;
+}
+
+.uno-button {
+  position: absolute; 
+  left: 50%; 
+  bottom: 95px; 
+  transform: translateX(160px); 
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #f80000;
+  color: white;
+  border: 3px solid white;
+  font-weight: 900;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+
+.uno-button.called {
+  background-color: #FFD700;
+  color: black;
+  box-shadow: 0 0 20px gold;
 }
 
 .modal {

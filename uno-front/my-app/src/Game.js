@@ -2,7 +2,7 @@ import "./index.css";
 import Circle from "./Circle";
 import { Deck } from "./Deck";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 const botNames = ["Max", "Leo", "Mia", "Sam", "Zoe", "Bob", "Tom", "Nia", "Rex"];
 
@@ -21,6 +21,8 @@ export default function Game() {
   const [discardPile, setDiscardPile] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [direction, setDirection] = useState(1);
+  
+  const [unoCalled, setUnoCalled] = useState(false);
 
   useEffect(() => {
     const fullDeck = Deck() || [];
@@ -48,6 +50,22 @@ export default function Game() {
     setGameState("playing");
   }, [playersCount]);
 
+  const handleUnoClick = useCallback(() => {
+    if (playerCards[0] && playerCards[0].length <= 2) {
+      setUnoCalled(true);
+    }
+  }, [playerCards]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "1") {
+        handleUnoClick();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleUnoClick]);
+
   const playCard = (playerIndex, cardIndex) => {
     if (gameState !== "playing" || playerIndex !== currentPlayer) return;
 
@@ -56,7 +74,8 @@ export default function Game() {
 
     if (
       selectedCard.color !== topCard.color &&
-      selectedCard.type !== topCard.type
+      selectedCard.type !== topCard.type &&
+      selectedCard.color !== 4
     ) {
       return; 
     }
@@ -69,6 +88,10 @@ export default function Game() {
 
     setPlayerCards(newPlayerCards);
     setDiscardPile(prev => [...prev, playedCard]);
+
+    if (playerIndex === 0) {
+      setUnoCalled(false); 
+    }
 
     let nextPlayer = (currentPlayer + direction) % playersCount;
     if (nextPlayer < 0) nextPlayer += playersCount;
@@ -100,6 +123,14 @@ export default function Game() {
       <div className="board-container">
         <Circle players={players} currentPlayer={currentPlayer} direction={direction} />
       </div>
+
+      {/* ՈՒՆՈ Կոճակը հիմա այստեղ է, քարտերի բլոկից դուրս */}
+      <button 
+        className={`uno-button ${unoCalled ? "called" : ""}`}
+        onClick={handleUnoClick}
+      >
+        UNO!
+      </button>
 
       <div className="player-hand">
         {playerCards[0] && playerCards[0].map((card, index) => (
