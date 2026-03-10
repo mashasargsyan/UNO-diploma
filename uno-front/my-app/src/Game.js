@@ -1,3 +1,4 @@
+import "./index.css";
 import Circle from "./Circle";
 import { Deck } from "./Deck";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -15,7 +16,6 @@ export default function Game() {
   const playersCount = state?.playersCount || 2;
 
   const [gameState, setGameState] = useState("dealing");
-  
   const [playerCards, setPlayerCards] = useState({});
   const [drawPile, setDrawPile] = useState([]);
   const [discardPile, setDiscardPile] = useState([]);
@@ -51,6 +51,16 @@ export default function Game() {
   const playCard = (playerIndex, cardIndex) => {
     if (gameState !== "playing" || playerIndex !== currentPlayer) return;
 
+    const topCard = discardPile[discardPile.length - 1];
+    const selectedCard = playerCards[playerIndex][cardIndex];
+
+    if (
+      selectedCard.color !== topCard.color &&
+      selectedCard.type !== topCard.type
+    ) {
+      return; 
+    }
+
     let newPlayerCards = { ...playerCards };
     let currentHand = [...newPlayerCards[playerIndex]];
 
@@ -75,19 +85,30 @@ export default function Game() {
     });
   }
 
-  console.log("PlayerCards:", playerCards);
-  console.log("DiscardPile:", discardPile);
-  
   return (
     <div className="GamePage">
-      <div className="title">UNO</div>
-      <div className="GameDetails">
-        <p><strong>Name:</strong> {name}</p>
-        <p><strong>State:</strong> {gameState}</p>
-        <div><button onClick={() => setShowExit(true)}>Exit</button></div>
+      
+      <div className="top-bar">
+        <div className="game-stats">
+          <p><strong>Name:</strong> {name}</p>
+          <p><strong>State:</strong> {gameState}</p>
+        </div>
+        <h2 className="top-title">UNO</h2>
+        <button className="exit-btn" onClick={() => setShowExit(true)}>Exit</button>
       </div>
 
-      <Circle players={players} currentPlayer={currentPlayer} direction={direction} />
+      <div className="board-container">
+        <Circle players={players} currentPlayer={currentPlayer} direction={direction} />
+      </div>
+
+      <div className="player-hand">
+        {playerCards[0] && playerCards[0].map((card, index) => (
+          <div key={index} className="uno-card" onClick={() => playCard(0, index)}>
+            <span>{card.type}</span>
+            <span>{card.color}</span>
+          </div>
+        ))}
+      </div>
 
       {showExit && (
         <div className="modal">

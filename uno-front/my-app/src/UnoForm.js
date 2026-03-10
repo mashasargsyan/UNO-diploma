@@ -68,8 +68,9 @@ export default function UnoForm() {
       </div>
 
       <div style={{ marginTop: "20px" }}>
+        <button onClick={() => navigate("/")} style={{ marginRight: "10px" }}>Back</button>
         <button onClick={handleStart}>Start</button>
-        <button onClick={() => navigate("/")} style={{ marginLeft: "10px" }}>Back</button>
+        
       </div>
     </div>
   );
