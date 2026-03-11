@@ -74,8 +74,7 @@ export default function Game() {
 
     if (
       selectedCard.color !== topCard.color &&
-      selectedCard.type !== topCard.type &&
-      selectedCard.color !== 4
+      selectedCard.type !== topCard.type
     ) {
       return; 
     }
@@ -108,6 +107,8 @@ export default function Game() {
     });
   }
 
+  const topCard = discardPile[discardPile.length - 1];
+
   return (
     <div className="GamePage">
       
@@ -121,10 +122,9 @@ export default function Game() {
       </div>
 
       <div className="board-container">
-        <Circle players={players} currentPlayer={currentPlayer} direction={direction} />
+        <Circle players={players} currentPlayer={currentPlayer} direction={direction} topCard={topCard} />
       </div>
 
-      {/* ՈՒՆՈ Կոճակը հիմա այստեղ է, քարտերի բլոկից դուրս */}
       <button 
         className={`uno-button ${unoCalled ? "called" : ""}`}
         onClick={handleUnoClick}

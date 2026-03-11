@@ -79,7 +79,7 @@ button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
-  background-color: #ff5555;
+  background-color: #e82c2c;
   color: white;
   border: none;
   border-radius: 5px;
@@ -87,9 +87,6 @@ button {
   margin: 10px 0;
 }
 
-button:hover {
-  background-color: #cc0000;
-}
 
 .GamePage {
   background-color: #2e8b57;
@@ -140,7 +137,7 @@ button:hover {
 .exit-btn {
   padding: 8px 20px;
   cursor: pointer;
-  background-color: #ff5555;
+  background-color: #e82c2c;
   color: white;
   border: none;
   border-radius: 5px;
@@ -149,9 +146,6 @@ button:hover {
   transition: background 0.3s;
 }
 
-.exit-btn:hover {
-  background-color: #cc0000;
-}
 
 .board-container {
   flex: 1;
@@ -261,7 +255,7 @@ button:hover {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
-  background-color: #ff5555;
+  background-color: #e82c2c;
   color: white;
   border: none;
   border-radius: 5px;
