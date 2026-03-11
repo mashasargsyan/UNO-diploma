@@ -202,7 +202,7 @@ button {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #f80000;
+  background-color: #e82c2c;
   color: white;
   border: 3px solid white;
   font-weight: 900;
@@ -214,6 +214,14 @@ button {
   justify-content: center;
   align-items: center;
   z-index: 20;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.uno-button:focus,
+.uno-button:active {
+  outline: none;
 }
 
 .uno-button.called {
