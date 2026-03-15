@@ -23,7 +23,7 @@ export const Deck = () => {
     green: 2,
     blue: 3
   };
- 
+  
   function createDeck() {
     const cards = [];
 
@@ -44,15 +44,15 @@ export const Deck = () => {
         cards.push({ type: cardTypes.draw, color: colorValue });
       }
     }
-   
+    
     for (let i = 0; i < 4; i++) {
-      cards.push({ type: cardTypes.wild});
-      cards.push({ type: cardTypes.wildDraw});
+      cards.push({ type: cardTypes.wild, color: null });
+      cards.push({ type: cardTypes.wildDraw, color: null });
     }
 
     return cards;
   }
- 
+  
   function shuffle(array) {
     let shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {

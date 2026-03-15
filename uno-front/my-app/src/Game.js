@@ -8,6 +8,9 @@ const botNames = ["Max", "Leo", "Mia", "Sam", "Zoe", "Bob", "Tom", "Nia", "Rex"]
 
 export default function Game() {
   const [showExit, setShowExit] = useState(false);
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [pendingWildCard, setPendingWildCard] = useState(null);
+  
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -74,15 +77,28 @@ export default function Game() {
 
     if (
       selectedCard.color !== topCard.color &&
-      selectedCard.type !== topCard.type
+      selectedCard.type !== topCard.type &&
+      selectedCard.type !== 13 &&
+      selectedCard.type !== 14
     ) {
       return; 
     }
 
+    if (selectedCard.type === 13 || selectedCard.type === 14) {
+      setPendingWildCard({ playerIndex, cardIndex });
+      setShowColorPicker(true);
+      return;
+    }
+
+    finalizePlay(playerIndex, cardIndex, selectedCard.color);
+  };
+
+  const finalizePlay = (playerIndex, cardIndex, chosenColor) => {
     let newPlayerCards = { ...playerCards };
     let currentHand = [...newPlayerCards[playerIndex]];
 
     const [playedCard] = currentHand.splice(cardIndex, 1);
+    playedCard.color = chosenColor;
     newPlayerCards[playerIndex] = currentHand;
 
     setPlayerCards(newPlayerCards);
@@ -97,6 +113,13 @@ export default function Game() {
     setCurrentPlayer(nextPlayer);
   };
 
+  const handleColorSelection = (color) => {
+    if (!pendingWildCard) return;
+    finalizePlay(pendingWildCard.playerIndex, pendingWildCard.cardIndex, color);
+    setShowColorPicker(false);
+    setPendingWildCard(null);
+  };
+
   const players = [];
   for (let i = 0; i < playersCount; i++) {
     players.push({
@@ -108,6 +131,13 @@ export default function Game() {
   }
 
   const topCard = discardPile[discardPile.length - 1];
+
+  const getCardImage = (card) => {
+    if (card.type === 13 || card.type === 14) {
+      return `/UnoCards/${card.type}.gif`;
+    }
+    return `/UnoCards/${card.color}_${card.type}.gif`;
+  };
 
   return (
     <div className="GamePage">
@@ -135,11 +165,24 @@ export default function Game() {
       <div className="player-hand">
         {playerCards[0] && playerCards[0].map((card, index) => (
           <div key={index} className="uno-card" onClick={() => playCard(0, index)}>
-            <span>{card.type}</span>
-            <span>{card.color}</span>
+            <img src={getCardImage(card)} alt={`Card ${card.type}`} />
           </div>
         ))}
       </div>
+
+      {showColorPicker && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Choose a color</h3>
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "20px" }}>
+              <button style={{ backgroundColor: "#ff5555", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(0)}></button>
+              <button style={{ backgroundColor: "#ffaa00", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(1)}></button>
+              <button style={{ backgroundColor: "#55aa55", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(2)}></button>
+              <button style={{ backgroundColor: "#5555ff", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(3)}></button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showExit && (
         <div className="modal">

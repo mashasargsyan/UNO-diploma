@@ -16,7 +16,7 @@ export default function Circle({ players, currentPlayer, direction, topCard }) {
 
     const cx = size / 2;
     const cy = size / 2;
-    const R = size * 0.35; 
+    const R = size * 0.27; // Սեղանի շառավիղը փոքրացրինք (0.35-ից դարձավ 0.27)
     const r = 30; 
 
     ctx.beginPath();
@@ -31,9 +31,9 @@ export default function Circle({ players, currentPlayer, direction, topCard }) {
     cardBackImg.src = "/uno_card_back.png"; 
 
     cardBackImg.onload = () => {
-      const cardW = 50;
-      const cardH = 75;
-      const pileX = cx + 45; 
+      const cardW = 70; // Փակ քարտի լայնությունը մեծացրինք
+      const cardH = 105; // Փակ քարտի բարձրությունը մեծացրինք
+      const pileX = cx + 10; // Դիրքավորեցինք իդեալական կենտրոնում
       const pileY = cy - cardH / 2;
 
       ctx.drawImage(cardBackImg, pileX - 4, pileY - 4, cardW, cardH);
@@ -47,31 +47,35 @@ export default function Circle({ players, currentPlayer, direction, topCard }) {
       ctx.strokeRect(pileX, pileY, cardW, cardH);
 
       if (topCard) {
-        const discardW = 42; 
-        const discardH = 62; 
-        const discardX = cx - discardW / 2;
+        const discardW = 70; // Բաց քարտի լայնությունը մեծացրինք
+        const discardH = 105; // Բաց քարտի բարձրությունը մեծացրինք
+        const discardX = cx - discardW - 10; // Դիրքավորեցինք ճիշտ կենտրոնում՝ փակ կապուկի կողքը
         const discardY = cy - discardH / 2;
         
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(discardX, discardY, discardW, discardH);
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(discardX, discardY, discardW, discardH);
+        const topImg = new Image();
+        if (topCard.type === 13 || topCard.type === 14) {
+          topImg.src = `/UnoCards/${topCard.type}.gif`;
+        } else {
+          topImg.src = `/UnoCards/${topCard.color}_${topCard.type}.gif`;
+        }
 
-        ctx.fillStyle = "#000000";
-        ctx.font = "bold 14px Arial";
-        ctx.textAlign = "left";
-        ctx.textBaseline = "top";
-        ctx.fillText(topCard.type, discardX + 4, discardY + 4);
-
-        ctx.textAlign = "right";
-        ctx.textBaseline = "bottom";
-        ctx.fillText(topCard.color, discardX + discardW - 4, discardY + discardH - 4);
+        topImg.onload = () => {
+          ctx.fillStyle = "#ffffff";
+          if (ctx.roundRect) {
+            ctx.beginPath();
+            ctx.roundRect(discardX, discardY, discardW, discardH, 6);
+            ctx.fill();
+          } else {
+            ctx.fillRect(discardX, discardY, discardW, discardH);
+          }
+          
+          ctx.drawImage(topImg, discardX + 4, discardY + 4, discardW - 8, discardH - 8);
+        };
       }
 
       if (!players || players.length === 0) return;
 
-      const arrowRadius = R + r + 45; 
+      const arrowRadius = R + r + 55; // Սլաքը հեռացրինք քարտերից
       ctx.beginPath();
       ctx.arc(cx, cy, arrowRadius, -Math.PI/2 - 0.3, -Math.PI/2 + 0.3);
       ctx.strokeStyle = "#ffffff";
@@ -123,7 +127,7 @@ export default function Circle({ players, currentPlayer, direction, topCard }) {
           ctx.lineWidth = i === currentPlayer ? 6 : 4; 
           ctx.stroke();
 
-          const labelDist = R + r + 20; 
+          const labelDist = R + r + 25; 
           const lx = cx + labelDist * Math.cos(angle);
           const ly = cy + labelDist * Math.sin(angle);
 
