@@ -1,5 +1,5 @@
 import "./index.css";
-import Circle from "./Table";
+import Table from "./Table";
 import { Deck } from "./Deck";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
@@ -152,7 +152,7 @@ export default function Game() {
       </div>
 
       <div className="board-container">
-        <Circle players={players} currentPlayer={currentPlayer} direction={direction} topCard={topCard} />
+        <Table players={players} currentPlayer={currentPlayer} direction={direction} topCard={topCard} />
       </div>
 
       <button 
@@ -178,7 +178,7 @@ export default function Game() {
               <button style={{ backgroundColor: "#ff5555", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(0)}></button>
               <button style={{ backgroundColor: "#ffaa00", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(1)}></button>
               <button style={{ backgroundColor: "#55aa55", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(2)}></button>
-              <button style={{ backgroundColor: "#5555ff", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(3)}></button>
+              <button style={{ backgroundColor: "#3434f6", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(3)}></button>
             </div>
           </div>
         </div>
