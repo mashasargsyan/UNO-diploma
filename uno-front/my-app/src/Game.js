@@ -1,5 +1,5 @@
 import "./index.css";
-import Circle from "./Circle";
+import Circle from "./Table";
 import { Deck } from "./Deck";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
