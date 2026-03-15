@@ -16,7 +16,7 @@ export default function Circle({ players, currentPlayer, direction, topCard }) {
 
     const cx = size / 2;
     const cy = size / 2;
-    const R = size * 0.27; // Սեղանի շառավիղը փոքրացրինք (0.35-ից դարձավ 0.27)
+    const R = size * 0.27; 
     const r = 30; 
 
     ctx.beginPath();
@@ -31,9 +31,9 @@ export default function Circle({ players, currentPlayer, direction, topCard }) {
     cardBackImg.src = "/uno_card_back.png"; 
 
     cardBackImg.onload = () => {
-      const cardW = 70; // Փակ քարտի լայնությունը մեծացրինք
-      const cardH = 105; // Փակ քարտի բարձրությունը մեծացրինք
-      const pileX = cx + 10; // Դիրքավորեցինք իդեալական կենտրոնում
+      const cardW = 70; 
+      const cardH = 105; 
+      const pileX = cx + 10; 
       const pileY = cy - cardH / 2;
 
       ctx.drawImage(cardBackImg, pileX - 4, pileY - 4, cardW, cardH);
@@ -47,9 +47,9 @@ export default function Circle({ players, currentPlayer, direction, topCard }) {
       ctx.strokeRect(pileX, pileY, cardW, cardH);
 
       if (topCard) {
-        const discardW = 70; // Բաց քարտի լայնությունը մեծացրինք
-        const discardH = 105; // Բաց քարտի բարձրությունը մեծացրինք
-        const discardX = cx - discardW - 10; // Դիրքավորեցինք ճիշտ կենտրոնում՝ փակ կապուկի կողքը
+        const discardW = 70; 
+        const discardH = 105; 
+        const discardX = cx - discardW - 10; 
         const discardY = cy - discardH / 2;
         
         const topImg = new Image();
@@ -69,13 +69,13 @@ export default function Circle({ players, currentPlayer, direction, topCard }) {
             ctx.fillRect(discardX, discardY, discardW, discardH);
           }
           
-          ctx.drawImage(topImg, discardX + 4, discardY + 4, discardW - 8, discardH - 8);
+          ctx.drawImage(topImg, discardX, discardY, discardW, discardH);
         };
       }
 
       if (!players || players.length === 0) return;
 
-      const arrowRadius = R + r + 55; // Սլաքը հեռացրինք քարտերից
+      const arrowRadius = R + r + 55; 
       ctx.beginPath();
       ctx.arc(cx, cy, arrowRadius, -Math.PI/2 - 0.3, -Math.PI/2 + 0.3);
       ctx.strokeStyle = "#ffffff";
