@@ -143,11 +143,7 @@ export default function Game() {
     <div className="GamePage">
       
       <div className="top-bar">
-        <div className="game-stats">
-          <p><strong>Name:</strong> {name}</p>
-          <p><strong>State:</strong> {gameState}</p>
-        </div>
-        <h2 className="top-title">UNO</h2>
+           <h2 className="top-title">UNO</h2>
         <button className="exit-btn" onClick={() => setShowExit(true)}>Exit</button>
       </div>
 
