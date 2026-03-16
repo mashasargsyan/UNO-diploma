@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 
 const imageCache = {};
 
-export default function Table({ players, currentPlayer, direction, topCard }) {
+export default function Circle({ players, currentPlayer, direction, topCard, thinkingPlayer }) {
   const canvasRef = useRef();
 
   useEffect(() => {
@@ -160,11 +160,39 @@ export default function Table({ players, currentPlayer, direction, topCard }) {
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(player.name, lx, ly);
+
+        // ՆՈՐ ՀԱՏՎԱԾԸ. Նկարում ենք "մտածելու" ամպիկը
+        if (thinkingPlayer === i) {
+          const bx = x + r + 5;
+          const by = y - r - 5;
+          
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          if (ctx.ellipse) {
+            ctx.ellipse(bx, by, 18, 12, 0, 0, Math.PI * 2);
+          } else {
+            ctx.arc(bx, by, 15, 0, Math.PI * 2);
+          }
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(bx - 12, by + 10, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(bx - 20, by + 18, 3, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = "#000000";
+          ctx.font = "bold 14px Arial";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("...", bx, by - 2);
+        }
       });
     };
 
     drawBoard();
-  }, [players, currentPlayer, direction, topCard]);
+  }, [players, currentPlayer, direction, topCard, thinkingPlayer]);
 
   return (
     <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "-10px" }}>

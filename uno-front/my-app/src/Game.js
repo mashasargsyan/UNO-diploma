@@ -1,5 +1,5 @@
 import "./index.css";
-import Table from "./Table";
+import Circle from "./Table";
 import { Deck } from "./Deck";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
@@ -26,6 +26,7 @@ export default function Game() {
   const [direction, setDirection] = useState(1);
   
   const [unoCalled, setUnoCalled] = useState(false);
+  const [thinkingPlayer, setThinkingPlayer] = useState(null); 
 
   useEffect(() => {
     const fullDeck = Deck() || [];
@@ -68,6 +69,25 @@ export default function Game() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleUnoClick]);
+
+  
+  useEffect(() => {
+    if (gameState !== "playing" || currentPlayer === 0) return;
+
+    setThinkingPlayer(currentPlayer); 
+
+    const timer = setTimeout(() => {
+      setThinkingPlayer(null); 
+      
+      
+      let nextPlayer = (currentPlayer + direction) % playersCount;
+      if (nextPlayer < 0) nextPlayer += playersCount;
+      setCurrentPlayer(nextPlayer);
+      
+    }, 2000); 
+
+    return () => clearTimeout(timer);
+  }, [currentPlayer, gameState, direction, playersCount]);
 
   const playCard = (playerIndex, cardIndex) => {
     if (gameState !== "playing" || playerIndex !== currentPlayer) return;
@@ -143,12 +163,18 @@ export default function Game() {
     <div className="GamePage">
       
       <div className="top-bar">
-           <h2 className="top-title">UNO</h2>
+        <h2 className="top-title">UNO</h2>
         <button className="exit-btn" onClick={() => setShowExit(true)}>Exit</button>
       </div>
 
       <div className="board-container">
-        <Table players={players} currentPlayer={currentPlayer} direction={direction} topCard={topCard} />
+        <Circle 
+          players={players} 
+          currentPlayer={currentPlayer} 
+          direction={direction} 
+          topCard={topCard} 
+          thinkingPlayer={thinkingPlayer} 
+        />
       </div>
 
       <button 
@@ -174,7 +200,7 @@ export default function Game() {
               <button style={{ backgroundColor: "#ff5555", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(0)}></button>
               <button style={{ backgroundColor: "#ffaa00", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(1)}></button>
               <button style={{ backgroundColor: "#55aa55", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(2)}></button>
-              <button style={{ backgroundColor: "#3434f6", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(3)}></button>
+              <button style={{ backgroundColor: "#5555ff", width: "50px", height: "50px", borderRadius: "50%" }} onClick={() => handleColorSelection(3)}></button>
             </div>
           </div>
         </div>
