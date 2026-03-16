@@ -70,6 +70,26 @@ export default function Game() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleUnoClick]);
 
+  const finalizePlay = useCallback((playerIndex, cardIndex, chosenColor) => {
+    let newPlayerCards = { ...playerCards };
+    let currentHand = [...newPlayerCards[playerIndex]];
+
+    const [playedCard] = currentHand.splice(cardIndex, 1);
+    playedCard.color = chosenColor;
+    newPlayerCards[playerIndex] = currentHand;
+
+    setPlayerCards(newPlayerCards);
+    setDiscardPile(prev => [...prev, playedCard]);
+
+    if (playerIndex === 0) {
+      setUnoCalled(false); 
+    }
+
+    let nextPlayer = (currentPlayer + direction) % playersCount;
+    if (nextPlayer < 0) nextPlayer += playersCount;
+    setCurrentPlayer(nextPlayer);
+  }, [playerCards, currentPlayer, direction, playersCount]);
+
   useEffect(() => {
     if (gameState !== "playing" || currentPlayer === 0) return;
 
@@ -78,14 +98,51 @@ export default function Game() {
     const timer = setTimeout(() => {
       setThinkingPlayer(null); 
       
-      let nextPlayer = (currentPlayer + direction) % playersCount;
-      if (nextPlayer < 0) nextPlayer += playersCount;
-      setCurrentPlayer(nextPlayer);
+      const currentHand = playerCards[currentPlayer];
+      const topCard = discardPile[discardPile.length - 1];
+
+      const isValidCard = (card) => {
+        return (
+          card.color === topCard.color || 
+          card.type === topCard.type || 
+          card.type === 13 || 
+          card.type === 14    
+        );
+      };
+
+      const playableCardIndex = currentHand.findIndex(isValidCard);
+
+      if (playableCardIndex !== -1) {
+        const cardToPlay = currentHand[playableCardIndex];
+        let chosenColor = cardToPlay.color;
+
+        if (cardToPlay.type === 13 || cardToPlay.type === 14) {
+          const colors = [0, 1, 2, 3]; 
+          chosenColor = colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        finalizePlay(currentPlayer, playableCardIndex, chosenColor);
+      } else {
+        if (drawPile.length > 0) {
+          const newDrawPile = [...drawPile];
+          const drawnCard = newDrawPile.pop();
+          
+          setDrawPile(newDrawPile);
+          setPlayerCards(prev => ({
+            ...prev,
+            [currentPlayer]: [...prev[currentPlayer], drawnCard]
+          }));
+        }
+
+        let nextPlayer = (currentPlayer + direction) % playersCount;
+        if (nextPlayer < 0) nextPlayer += playersCount;
+        setCurrentPlayer(nextPlayer);
+      }
       
     }, 1000); 
 
     return () => clearTimeout(timer);
-  }, [currentPlayer, gameState, direction, playersCount]);
+  }, [currentPlayer, gameState, direction, playersCount, playerCards, discardPile, drawPile, finalizePlay]);
 
   const playCard = (playerIndex, cardIndex) => {
     if (gameState !== "playing" || playerIndex !== currentPlayer) return;
@@ -109,26 +166,6 @@ export default function Game() {
     }
 
     finalizePlay(playerIndex, cardIndex, selectedCard.color);
-  };
-
-  const finalizePlay = (playerIndex, cardIndex, chosenColor) => {
-    let newPlayerCards = { ...playerCards };
-    let currentHand = [...newPlayerCards[playerIndex]];
-
-    const [playedCard] = currentHand.splice(cardIndex, 1);
-    playedCard.color = chosenColor;
-    newPlayerCards[playerIndex] = currentHand;
-
-    setPlayerCards(newPlayerCards);
-    setDiscardPile(prev => [...prev, playedCard]);
-
-    if (playerIndex === 0) {
-      setUnoCalled(false); 
-    }
-
-    let nextPlayer = (currentPlayer + direction) % playersCount;
-    if (nextPlayer < 0) nextPlayer += playersCount;
-    setCurrentPlayer(nextPlayer);
   };
 
   const handleColorSelection = (color) => {
