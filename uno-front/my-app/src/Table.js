@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 
 const imageCache = {};
 
-export default function Circle({ players, currentPlayer, direction, topCard, thinkingPlayer }) {
+export default function Circle({ players, currentPlayer, direction, topCard, thinkingPlayer, playerCards }) {
   const canvasRef = useRef();
 
   useEffect(() => {
@@ -51,8 +51,9 @@ export default function Circle({ players, currentPlayer, direction, topCard, thi
 
       const cx = size / 2;
       const cy = size / 2;
+      
       const R = size * 0.27; 
-      const r = 30; 
+      const r = 28; 
 
       ctx.beginPath();
       ctx.arc(cx, cy, R, 0, Math.PI * 2);
@@ -99,7 +100,7 @@ export default function Circle({ players, currentPlayer, direction, topCard, thi
 
       if (!players || players.length === 0) return;
 
-      const arrowRadius = R + r + 55; 
+      const arrowRadius = R + r + 105; 
       ctx.beginPath();
       ctx.arc(cx, cy, arrowRadius, -Math.PI/2 - 0.3, -Math.PI/2 + 0.3);
       ctx.strokeStyle = "#ffffff";
@@ -151,7 +152,7 @@ export default function Circle({ players, currentPlayer, direction, topCard, thi
         ctx.lineWidth = i === currentPlayer ? 6 : 4; 
         ctx.stroke();
 
-        const labelDist = R + r + 25; 
+        const labelDist = R + r + 15; 
         const lx = cx + labelDist * Math.cos(angle);
         const ly = cy + labelDist * Math.sin(angle);
 
@@ -161,7 +162,43 @@ export default function Circle({ players, currentPlayer, direction, topCard, thi
         ctx.textBaseline = "middle";
         ctx.fillText(player.name, lx, ly);
 
-        // ՆՈՐ ՀԱՏՎԱԾԸ. Նկարում ենք "մտածելու" ամպիկը
+        
+        if (i !== 0 && playerCards && playerCards[i]) {
+          const count = playerCards[i].length;
+          const miniW = 20; 
+          const miniH = 30; 
+          const overlap = 10; 
+          const totalW = miniW + (count - 1) * overlap;
+
+          
+          const cardDist = R + r + 35; 
+          const cX = cx + cardDist * Math.cos(angle);
+          const cY = cy + cardDist * Math.sin(angle);
+
+          
+          const alignX = (Math.cos(angle) + 1) / 2; 
+          const alignY = (Math.sin(angle) + 1) / 2; 
+
+          const startX = cX - totalW * (1 - alignX);
+          const startY = cY - miniH * (1 - alignY);
+
+          for (let j = 0; j < count; j++) {
+            if (cardBackImg) {
+              const px = startX + j * overlap;
+              
+              ctx.fillStyle = "rgba(0,0,0,0.3)";
+              ctx.fillRect(px + 2, startY + 2, miniW, miniH);
+              
+              ctx.drawImage(cardBackImg, px, startY, miniW, miniH);
+              
+              ctx.strokeStyle = "rgba(255,255,255,0.8)";
+              ctx.lineWidth = 1;
+              ctx.strokeRect(px, startY, miniW, miniH);
+            }
+          }
+        }
+        // ------------------------------------------------
+
         if (thinkingPlayer === i) {
           const bx = x + r + 5;
           const by = y - r - 5;
@@ -192,7 +229,7 @@ export default function Circle({ players, currentPlayer, direction, topCard, thi
     };
 
     drawBoard();
-  }, [players, currentPlayer, direction, topCard, thinkingPlayer]);
+  }, [players, currentPlayer, direction, topCard, thinkingPlayer, playerCards]);
 
   return (
     <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "-10px" }}>

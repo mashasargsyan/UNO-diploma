@@ -26,7 +26,7 @@ export default function Game() {
   const [direction, setDirection] = useState(1);
   
   const [unoCalled, setUnoCalled] = useState(false);
-  const [thinkingPlayer, setThinkingPlayer] = useState(null); 
+  const [thinkingPlayer, setThinkingPlayer] = useState(null);
 
   useEffect(() => {
     const fullDeck = Deck() || [];
@@ -70,7 +70,6 @@ export default function Game() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleUnoClick]);
 
-  
   useEffect(() => {
     if (gameState !== "playing" || currentPlayer === 0) return;
 
@@ -79,12 +78,11 @@ export default function Game() {
     const timer = setTimeout(() => {
       setThinkingPlayer(null); 
       
-      
       let nextPlayer = (currentPlayer + direction) % playersCount;
       if (nextPlayer < 0) nextPlayer += playersCount;
       setCurrentPlayer(nextPlayer);
       
-    }, 2000); 
+    }, 1000); 
 
     return () => clearTimeout(timer);
   }, [currentPlayer, gameState, direction, playersCount]);
@@ -173,7 +171,8 @@ export default function Game() {
           currentPlayer={currentPlayer} 
           direction={direction} 
           topCard={topCard} 
-          thinkingPlayer={thinkingPlayer} 
+          thinkingPlayer={thinkingPlayer}
+          playerCards={playerCards} 
         />
       </div>
 
