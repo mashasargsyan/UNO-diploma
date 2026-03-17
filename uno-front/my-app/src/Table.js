@@ -2,8 +2,34 @@ import React, { useEffect, useRef } from "react";
 
 const imageCache = {};
 
-export default function Circle({ players, currentPlayer, direction, topCard, thinkingPlayer, playerCards }) {
+export default function Table({ players, currentPlayer, direction, topCard, thinkingPlayer, playerCards, onDeckClick }) {
   const canvasRef = useRef();
+
+  const handleCanvasClick = (e) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
+
+    const size = 600;
+    const cx = size / 2;
+    const cy = size / 2;
+    const cardW = 70; 
+    const cardH = 105; 
+    const pileX = cx + 10; 
+    const pileY = cy - cardH / 2;
+
+    if (x >= pileX - 4 && x <= pileX + cardW && y >= pileY - 4 && y <= pileY + cardH) {
+      if (onDeckClick) {
+        onDeckClick();
+      }
+    }
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -51,8 +77,7 @@ export default function Circle({ players, currentPlayer, direction, topCard, thi
 
       const cx = size / 2;
       const cy = size / 2;
-      
-      const R = size * 0.27; 
+      const R = size * 0.23; 
       const r = 28; 
 
       ctx.beginPath();
@@ -162,7 +187,6 @@ export default function Circle({ players, currentPlayer, direction, topCard, thi
         ctx.textBaseline = "middle";
         ctx.fillText(player.name, lx, ly);
 
-        
         if (i !== 0 && playerCards && playerCards[i]) {
           const count = playerCards[i].length;
           const miniW = 20; 
@@ -170,12 +194,10 @@ export default function Circle({ players, currentPlayer, direction, topCard, thi
           const overlap = 10; 
           const totalW = miniW + (count - 1) * overlap;
 
-          
           const cardDist = R + r + 35; 
           const cX = cx + cardDist * Math.cos(angle);
           const cY = cy + cardDist * Math.sin(angle);
 
-          
           const alignX = (Math.cos(angle) + 1) / 2; 
           const alignY = (Math.sin(angle) + 1) / 2; 
 
@@ -197,7 +219,6 @@ export default function Circle({ players, currentPlayer, direction, topCard, thi
             }
           }
         }
-        // ------------------------------------------------
 
         if (thinkingPlayer === i) {
           const bx = x + r + 5;
@@ -233,7 +254,11 @@ export default function Circle({ players, currentPlayer, direction, topCard, thi
 
   return (
     <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "-10px" }}>
-      <canvas ref={canvasRef} style={{ maxWidth: "90vw", maxHeight: "75vh" }} />
+      <canvas 
+        ref={canvasRef} 
+        onClick={handleCanvasClick} 
+        style={{ maxWidth: "90vw", maxHeight: "75vh", cursor: currentPlayer === 0 ? "pointer" : "default" }} 
+      />
     </div>
   );
 }

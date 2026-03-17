@@ -87,7 +87,6 @@ button {
   margin: 10px 0;
 }
 
-
 .GamePage {
   background-color: #2e8b57;
   height: 100vh;
@@ -146,6 +145,9 @@ button {
   transition: background 0.3s;
 }
 
+.exit-btn:hover {
+  background-color: #cc0000;
+}
 
 .board-container {
   flex: 1;
@@ -160,6 +162,18 @@ button {
   object-fit: contain;
 }
 
+.canvas-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: -10px;
+}
+
+.game-canvas {
+  max-width: 90vw;
+  max-height: 75vh;
+}
+
 .player-hand {
   display: flex;
   justify-content: center;
@@ -172,6 +186,7 @@ button {
   bottom: 30px;
 }
 
+/* ՔՈ ԳՐԱԾ ՔԱՐՏԵՐԻ ԴԻԶԱՅՆԸ */
 .uno-card {
   width: 70px;  
   height: 105px; 
@@ -198,6 +213,7 @@ button {
   transform: translateY(-35px) scale(1); 
 }
 
+/* ՔՈ ԳՐԱԾ UNO ԿՈՃԱԿԸ */
 .uno-button {
   position: absolute; 
   left: 50%; 
@@ -228,10 +244,36 @@ button {
   outline: none;
 }
 
-.uno-button.called {
-  background-color: #FFD700;
-  color: black;
-  box-shadow: 0 0 20px gold;
+.uno-button:hover {
+  transform: translateX(160px) scale(1);
+}
+
+.pass-button {
+  position: absolute;
+  left: 50%;
+  bottom: 95px;
+  transform: translateX(-220px);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #6c757d;
+  color: white;
+  border: 3px solid white;
+  font-weight: 900;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.pass-button:hover {
+  background-color: #5a6268;
+  transform: translateX(-220px) scale(1.1);
 }
 
 .modal {
@@ -271,4 +313,58 @@ button {
   color: white;
   border: none;
   border-radius: 5px;
+}
+
+.drawn-card-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.drawn-card-wrapper {
+  width: 80px;
+  height: 120px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  border-radius: 6px;
+  background-color: white;
+  padding: 5px;
+}
+
+.drawn-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.play-btn {
+  background-color: #28a745 !important;
+  margin: 0 10px !important;
+}
+
+.play-btn:hover {
+  background-color: #218838 !important;
+}
+
+.keep-btn {
+  background-color: #6c757d !important;
+  margin: 0 10px !important;
+}
+
+.keep-btn:hover {
+  background-color: #5a6268 !important;
+}
+
+.color-picker-container {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.color-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  padding: 0;
 }
