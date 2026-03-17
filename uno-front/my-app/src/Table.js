@@ -77,7 +77,7 @@ export default function Table({ players, currentPlayer, direction, topCard, thin
 
       const cx = size / 2;
       const cy = size / 2;
-      const R = size * 0.23; 
+      const R = size * 0.25; 
       const r = 28; 
 
       ctx.beginPath();
@@ -120,7 +120,7 @@ export default function Table({ players, currentPlayer, direction, topCard, thin
           ctx.fillRect(discardX, discardY, discardW, discardH);
         }
         
-        ctx.drawImage(topImg, discardX + 4, discardY + 4, discardW - 8, discardH - 8);
+        ctx.drawImage(topImg, discardX, discardY , discardW , discardH );
       }
 
       if (!players || players.length === 0) return;

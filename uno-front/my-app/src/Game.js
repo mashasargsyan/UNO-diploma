@@ -10,9 +10,13 @@ export default function Game() {
   const [showExit, setShowExit] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [pendingWildCard, setPendingWildCard] = useState(null);
-  const [botPickedColor, setBotPickedColor] = useState(null); 
+  const [botPickedColor, setBotPickedColor] = useState(null);
   const [hasDrawnThisTurn, setHasDrawnThisTurn] = useState(false);
-  
+  const [drawnPlayableCard, setDrawnPlayableCard] = useState(null);
+
+  const [winner, setWinner] = useState(null);
+  const [unoPenaltyMessage, setUnoPenaltyMessage] = useState(null);
+
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -26,7 +30,7 @@ export default function Game() {
   const [discardPile, setDiscardPile] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [direction, setDirection] = useState(1);
-  
+
   const [unoCalled, setUnoCalled] = useState(false);
   const [thinkingPlayer, setThinkingPlayer] = useState(null);
 
@@ -78,67 +82,93 @@ export default function Game() {
 
     const [playedCard] = currentHand.splice(cardIndex, 1);
     playedCard.color = chosenColor;
+
+    let currentDrawPile = [...drawPile];
+
+    if (playerIndex === 0 && currentHand.length === 1 && !unoCalled) {
+      let drawnCards = [];
+      for (let i = 0; i < 4; i++) {
+        if (currentDrawPile.length > 0) {
+          drawnCards.push(currentDrawPile.pop());
+        }
+      }
+      currentHand = [...currentHand, ...drawnCards];
+
+      const catcher = playersCount > 1 ? botNames[0] : "The Bot";
+      setUnoPenaltyMessage(`${catcher} says. «${name}, you forget to say UNO!»: +4 cards`);
+
+      setTimeout(() => {
+        setUnoPenaltyMessage(null);
+      }, 3500);
+    }
+
     newPlayerCards[playerIndex] = currentHand;
+
+    if (newPlayerCards[playerIndex].length === 0) {
+      setPlayerCards(newPlayerCards);
+      setDiscardPile(prev => [...prev, playedCard]);
+      setWinner(playerIndex);
+      setGameState("ended");
+      return;
+    }
 
     let currentDirection = direction;
     let step = 1;
     let cardsToDraw = 0;
 
-    if (playedCard.type === 11) { 
+    if (playedCard.type === 11) {
       if (playersCount === 2) {
-        step = 2; 
+        step = 2;
       } else {
         currentDirection = direction * -1;
         setDirection(currentDirection);
       }
-    } else if (playedCard.type === 10) { 
+    } else if (playedCard.type === 10) {
       step = 2;
-    } else if (playedCard.type === 12) { 
+    } else if (playedCard.type === 12) {
       cardsToDraw = 2;
-      step = 2; 
-    } else if (playedCard.type === 14) { 
+      step = 2;
+    } else if (playedCard.type === 14) {
       cardsToDraw = 4;
-      step = 2; 
+      step = 2;
     }
 
     if (cardsToDraw > 0) {
       let victim = (playerIndex + currentDirection) % playersCount;
       if (victim < 0) victim += playersCount;
 
-      let currentDrawPile = [...drawPile];
       let drawnCards = [];
-      
       for (let i = 0; i < cardsToDraw; i++) {
         if (currentDrawPile.length > 0) {
           drawnCards.push(currentDrawPile.pop());
         }
       }
-      
+
       newPlayerCards[victim] = [...newPlayerCards[victim], ...drawnCards];
-      setDrawPile(currentDrawPile);
     }
 
+    setDrawPile(currentDrawPile);
     setPlayerCards(newPlayerCards);
     setDiscardPile(prev => [...prev, playedCard]);
 
     if (playerIndex === 0) {
-      setUnoCalled(false); 
+      setUnoCalled(false);
       setHasDrawnThisTurn(false);
     }
 
     let nextPlayer = (playerIndex + (currentDirection * step)) % playersCount;
     if (nextPlayer < 0) nextPlayer += playersCount;
     setCurrentPlayer(nextPlayer);
-  }, [playerCards, direction, playersCount, drawPile]);
+  }, [playerCards, direction, playersCount, drawPile, unoCalled, name]);
 
   useEffect(() => {
     if (gameState !== "playing" || currentPlayer === 0) return;
 
-    setThinkingPlayer(currentPlayer); 
+    setThinkingPlayer(currentPlayer);
 
     const timer = setTimeout(() => {
-      setThinkingPlayer(null); 
-      
+      setThinkingPlayer(null);
+
       const currentHand = playerCards[currentPlayer];
       const topCard = discardPile[discardPile.length - 1];
 
@@ -146,10 +176,10 @@ export default function Game() {
 
       const isValidCard = (card) => {
         return (
-          card.color === topCard.color || 
-          card.type === topCard.type || 
-          card.type === 13 || 
-          card.type === 14    
+          card.color === topCard.color ||
+          card.type === topCard.type ||
+          card.type === 13 ||
+          card.type === 14
         );
       };
 
@@ -159,19 +189,30 @@ export default function Game() {
         const cardToPlay = currentHand[playableCardIndex];
 
         if (cardToPlay.type === 13 || cardToPlay.type === 14) {
-          const colors = [0, 1, 2, 3]; 
+          const colors = [0, 1, 2, 3];
           const chosenColor = colors[Math.floor(Math.random() * colors.length)];
-          
+
           setPendingWildCard({ playerIndex: currentPlayer, cardIndex: playableCardIndex });
-          setBotPickedColor(chosenColor);
           setShowColorPicker(true);
 
-          setTimeout(() => {
-            setShowColorPicker(false);
-            setBotPickedColor(null);
-            setPendingWildCard(null);
-            finalizePlay(currentPlayer, playableCardIndex, chosenColor);
-          }, 1500); 
+          const baseSpins = 12;
+          const totalSteps = baseSpins + chosenColor;
+          let currentStep = 0;
+
+          const spinInterval = setInterval(() => {
+            setBotPickedColor(currentStep % 4);
+            currentStep++;
+            if (currentStep > totalSteps) {
+              clearInterval(spinInterval);
+
+              setTimeout(() => {
+                setShowColorPicker(false);
+                setBotPickedColor(null);
+                setPendingWildCard(null);
+                finalizePlay(currentPlayer, playableCardIndex, chosenColor);
+              }, 1200);
+            }
+          }, 150);
 
         } else {
           finalizePlay(currentPlayer, playableCardIndex, cardToPlay.color);
@@ -180,7 +221,7 @@ export default function Game() {
         if (drawPile.length > 0) {
           const newDrawPile = [...drawPile];
           const drawnCard = newDrawPile.pop();
-          
+
           setDrawPile(newDrawPile);
           setPlayerCards(prev => ({
             ...prev,
@@ -192,27 +233,27 @@ export default function Game() {
         if (nextPlayer < 0) nextPlayer += playersCount;
         setCurrentPlayer(nextPlayer);
       }
-      
-    }, 1000); 
+
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [currentPlayer, gameState, direction, playersCount, playerCards, discardPile, drawPile, finalizePlay]);
 
   const handleDrawCard = () => {
     if (gameState !== "playing" || currentPlayer !== 0) return;
-    if (hasDrawnThisTurn) return; 
+    if (hasDrawnThisTurn) return;
 
     const topCard = discardPile[discardPile.length - 1];
     const currentHand = playerCards[0];
 
-    const hasPlayableCard = currentHand.some(card => 
-      card.color === topCard.color || 
-      card.type === topCard.type || 
-      card.type === 13 || 
+    const hasPlayableCard = currentHand.some(card =>
+      card.color === topCard.color ||
+      card.type === topCard.type ||
+      card.type === 13 ||
       card.type === 14
     );
 
-    if (hasPlayableCard) return; 
+    if (hasPlayableCard) return;
 
     if (drawPile.length > 0) {
       const newDrawPile = [...drawPile];
@@ -225,14 +266,14 @@ export default function Game() {
       }));
 
       const isValid = (
-        drawnCard.color === topCard.color || 
-        drawnCard.type === topCard.type || 
-        drawnCard.type === 13 || 
+        drawnCard.color === topCard.color ||
+        drawnCard.type === topCard.type ||
+        drawnCard.type === 13 ||
         drawnCard.type === 14
       );
 
       if (isValid) {
-        setHasDrawnThisTurn(true); 
+        setHasDrawnThisTurn(true);
       } else {
         let nextPlayer = (currentPlayer + direction) % playersCount;
         if (nextPlayer < 0) nextPlayer += playersCount;
@@ -253,7 +294,7 @@ export default function Game() {
       selectedCard.type !== 13 &&
       selectedCard.type !== 14
     ) {
-      return; 
+      return;
     }
 
     if (selectedCard.type === 13 || selectedCard.type === 14) {
@@ -294,25 +335,24 @@ export default function Game() {
 
   return (
     <div className="GamePage">
-      
       <div className="top-bar">
         <h2 className="top-title">UNO</h2>
         <button className="exit-btn" onClick={() => setShowExit(true)}>Exit</button>
       </div>
 
       <div className="board-container">
-        <Table 
-          players={players} 
-          currentPlayer={currentPlayer} 
-          direction={direction} 
-          topCard={topCard} 
+        <Table
+          players={players}
+          currentPlayer={currentPlayer}
+          direction={direction}
+          topCard={topCard}
           thinkingPlayer={thinkingPlayer}
-          playerCards={playerCards} 
+          playerCards={playerCards}
           onDeckClick={handleDrawCard}
         />
       </div>
 
-      <button 
+      <button
         className={`uno-button ${unoCalled ? "called" : ""}`}
         onClick={handleUnoClick}
       >
@@ -320,28 +360,8 @@ export default function Game() {
       </button>
 
       {hasDrawnThisTurn && currentPlayer === 0 && (
-        <button 
-          style={{
-            position: "absolute",
-            left: "50%",
-            bottom: "95px",
-            transform: "translateX(-220px)", 
-            width: "60px",
-            height: "60px",
-            borderRadius: "50%",
-            backgroundColor: "#6c757d",
-            color: "white",
-            border: "3px solid white",
-            fontWeight: "900",
-            fontSize: "14px",
-            cursor: "pointer",
-            boxShadow: "2px 2px 5px rgba(0,0,0,0.5)",
-            zIndex: 20,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 0
-          }}
+        <button
+          className="pass-button"
           onClick={() => {
             setHasDrawnThisTurn(false);
             let nextPlayer = (currentPlayer + direction) % playersCount;
@@ -361,30 +381,48 @@ export default function Game() {
         ))}
       </div>
 
+      {unoPenaltyMessage && (
+        <div className="modal" style={{ zIndex: 2000 }}>
+          <div className="modal-content" style={{ border: "4px solid #e82c2c" }}>
+            <h2 style={{ color: "#e82c2c", marginTop: 0 }}>Warning</h2>
+            <h3 style={{ margin: "20px 0", lineHeight: "1.5" }}>{unoPenaltyMessage}</h3>
+          </div>
+        </div>
+      )}
+
+      {gameState === "ended" && winner !== null && (
+        <div className="modal" style={{ zIndex: 2000 }}>
+          <div className="modal-content" style={{ padding: "40px" }}>
+            <h1 style={{ fontSize: "2.5em", color: winner === 0 ? "#28a745" : "#e82c2c", margin: "0 0 20px 0" }}>
+              {winner === 0 ? "YOU WIN!" : `${players[winner].name} WINS!`}
+            </h1>
+            <p style={{ fontSize: "1.2em", fontWeight: "bold", marginBottom: "30px", color: "#555" }}>
+              The game has ended.
+            </p>
+            <div className="modal-buttons">
+              <button onClick={() => window.location.reload()} style={{ backgroundColor: "#28a745" }}>NEW GAME</button>
+              <button onClick={() => navigate("/")} style={{ backgroundColor: "#6c757d" }}>MAIN MENU</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showColorPicker && pendingWildCard && (
         <div className="modal">
           <div className="modal-content">
-            <h3>{botPickedColor !== null ? `${players[pendingWildCard.playerIndex].name} chose a color!` : "Choose a color"}</h3>
-            <div style={{ display: "flex", gap: "15px", justifyContent: "center", marginTop: "20px" }}>
-              {[
-                { id: 0, hex: "#ff5555" },
-                { id: 1, hex: "#ffaa00" },
-                { id: 2, hex: "#55aa55" },
-                { id: 3, hex: "#5555ff" }
-              ].map((c) => (
-                <button 
+            <h3>{botPickedColor !== null ? "Color is being selected..." : "Select a color"}</h3>
+            <div className="color-picker-container">
+              {[{ id: 0, hex: "#ff5555" }, { id: 1, hex: "#ffaa00" }, { id: 2, hex: "#55aa55" }, { id: 3, hex: "#5555ff" }].map((c) => (
+                <button
                   key={c.id}
-                  style={{ 
-                    backgroundColor: c.hex, 
-                    width: "60px", 
-                    height: "60px", 
-                    borderRadius: "50%",
+                  className="color-btn"
+                  style={{
+                    backgroundColor: c.hex,
                     border: botPickedColor === c.id ? "6px solid black" : "3px solid white",
                     boxShadow: botPickedColor === c.id ? "0 0 15px rgba(0,0,0,0.6)" : "0 4px 6px rgba(0,0,0,0.2)",
                     cursor: botPickedColor !== null ? "default" : "pointer",
-                    transition: "all 0.3s ease",
                     transform: botPickedColor === c.id ? "scale(1.15)" : "scale(1)"
-                  }} 
+                  }}
                   onClick={() => handleColorSelection(c.id)}
                 ></button>
               ))}
@@ -399,7 +437,7 @@ export default function Game() {
             <h3>Are you sure?</h3>
             <div className="modal-buttons">
               <button onClick={() => navigate("/")}>YES</button>
-              <button onClick={() => setShowExit(false)}>NO</button>
+              <button style={{ backgroundColor: "#6c757d" }} onClick={() => setShowExit(false)}>NO</button>
             </div>
           </div>
         </div>

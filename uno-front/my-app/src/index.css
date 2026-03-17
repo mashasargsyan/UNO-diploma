@@ -186,14 +186,13 @@ button {
   bottom: 30px;
 }
 
-/* ՔՈ ԳՐԱԾ ՔԱՐՏԵՐԻ ԴԻԶԱՅՆԸ */
 .uno-card {
   width: 70px;  
   height: 105px; 
   border: none;
   background-color: white;
   border-radius: 6px; 
-  padding: 0px; 
+  padding: -2px; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -204,8 +203,8 @@ button {
 }
 
 .uno-card img {
-  width: 100%;
-  height: 100%;
+  width: 110%;
+  height: 103%;
   object-fit: contain;
 }
 
@@ -213,7 +212,6 @@ button {
   transform: translateY(-35px) scale(1); 
 }
 
-/* ՔՈ ԳՐԱԾ UNO ԿՈՃԱԿԸ */
 .uno-button {
   position: absolute; 
   left: 50%; 
