@@ -12,16 +12,13 @@ export default function Game() {
   const [pendingWildCard, setPendingWildCard] = useState(null);
   const [botPickedColor, setBotPickedColor] = useState(null);
   const [hasDrawnThisTurn, setHasDrawnThisTurn] = useState(false);
-  const [drawnPlayableCard, setDrawnPlayableCard] = useState(null);
-
   const [winner, setWinner] = useState(null);
   const [unoPenaltyMessage, setUnoPenaltyMessage] = useState(null);
 
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const difficulty = state?.difficulty || "Easy";
-  const name = state?.name || "Player 1";
+   const name = state?.name || "Player 1";
   const playersCount = state?.playersCount || 2;
 
   const [gameState, setGameState] = useState("dealing");
@@ -94,8 +91,7 @@ export default function Game() {
       }
       currentHand = [...currentHand, ...drawnCards];
 
-      const catcher = playersCount > 1 ? botNames[0] : "The Bot";
-      setUnoPenaltyMessage(`${catcher} says. «${name}, you forget to say UNO!»: +4 cards`);
+      setUnoPenaltyMessage(`${name}, you forget to say UNO!»: +4 cards`);
 
       setTimeout(() => {
         setUnoPenaltyMessage(null);
