@@ -437,7 +437,7 @@ export default function Game() {
           <div className="modal-content">
             <h3>{botPickedColor !== null ? "Color is being selected..." : "Select a color"}</h3>
             <div className="color-picker-container">
-              {[{ id: 0, hex: "#ff5555" }, { id: 1, hex: "#ffaa00" }, { id: 2, hex: "#55aa55" }, { id: 3, hex: "#5555ff" }].map((c) => (
+              {[{ id: 0, hex: "#ff5555" }, { id: 1, hex: "#ffaa00" }, { id: 2, hex: "#55aa55" }, { id: 3, hex: "#2d2de7" }].map((c) => (
                 <button
                   key={c.id}
                   className="color-btn"

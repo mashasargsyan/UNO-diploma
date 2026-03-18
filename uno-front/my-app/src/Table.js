@@ -141,6 +141,16 @@ export default function Table({ players, currentPlayer, direction, topCard, thin
         ctx.clip();
         ctx.drawImage(topImg, discardX, discardY , discardW , discardH );
         ctx.restore();
+
+        ctx.beginPath();
+        if (ctx.roundRect) {
+          ctx.roundRect(discardX, discardY, discardW, discardH, 6);
+        } else {
+          ctx.rect(discardX, discardY, discardW, discardH);
+        }
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.stroke();
       }
 
       if (!players || players.length === 0) return;
