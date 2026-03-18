@@ -93,16 +93,34 @@ export default function Table({ players, currentPlayer, direction, topCard, thin
       const pileX = cx + 10; 
       const pileY = cy - cardH / 2;
 
-      if (cardBackImg) {
-        ctx.drawImage(cardBackImg, pileX - 4, pileY - 4, cardW, cardH);
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 1.5;
-        ctx.strokeRect(pileX - 4, pileY - 4, cardW, cardH);
+      const drawRoundedCard = (img, x, y, w, h, radius, strokeColor, lineWidth) => {
+        ctx.save();
+        ctx.beginPath();
+        if (ctx.roundRect) {
+          ctx.roundRect(x, y, w, h, radius);
+        } else {
+          ctx.rect(x, y, w, h);
+        }
+        ctx.clip();
+        ctx.drawImage(img, x, y, w, h);
+        ctx.restore();
 
-        ctx.drawImage(cardBackImg, pileX, pileY, cardW, cardH);
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 1.5;
-        ctx.strokeRect(pileX, pileY, cardW, cardH);
+        if (strokeColor) {
+          ctx.beginPath();
+          if (ctx.roundRect) {
+            ctx.roundRect(x, y, w, h, radius);
+          } else {
+            ctx.rect(x, y, w, h);
+          }
+          ctx.strokeStyle = strokeColor;
+          ctx.lineWidth = lineWidth;
+          ctx.stroke();
+        }
+      };
+
+      if (cardBackImg) {
+        drawRoundedCard(cardBackImg, pileX - 4, pileY - 4, cardW, cardH, 6, "#ffffff", 1.5);
+        drawRoundedCard(cardBackImg, pileX, pileY, cardW, cardH, 6, "#ffffff", 1.5);
       }
 
       if (topCard && topImg) {
@@ -111,16 +129,18 @@ export default function Table({ players, currentPlayer, direction, topCard, thin
         const discardX = cx - discardW - 10; 
         const discardY = cy - discardH / 2;
         
-        ctx.fillStyle = "#ffffff";
+        ctx.save();
+        ctx.beginPath();
         if (ctx.roundRect) {
-          ctx.beginPath();
           ctx.roundRect(discardX, discardY, discardW, discardH, 6);
-          ctx.fill();
         } else {
-          ctx.fillRect(discardX, discardY, discardW, discardH);
+          ctx.rect(discardX, discardY, discardW, discardH);
         }
-        
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
+        ctx.clip();
         ctx.drawImage(topImg, discardX, discardY , discardW , discardH );
+        ctx.restore();
       }
 
       if (!players || players.length === 0) return;
@@ -209,13 +229,15 @@ export default function Table({ players, currentPlayer, direction, topCard, thin
               const px = startX + j * overlap;
               
               ctx.fillStyle = "rgba(0,0,0,0.3)";
-              ctx.fillRect(px + 2, startY + 2, miniW, miniH);
+              ctx.beginPath();
+              if (ctx.roundRect) {
+                ctx.roundRect(px + 2, startY + 2, miniW, miniH, 3);
+              } else {
+                ctx.rect(px + 2, startY + 2, miniW, miniH);
+              }
+              ctx.fill();
               
-              ctx.drawImage(cardBackImg, px, startY, miniW, miniH);
-              
-              ctx.strokeStyle = "rgba(255,255,255,0.8)";
-              ctx.lineWidth = 1;
-              ctx.strokeRect(px, startY, miniW, miniH);
+              drawRoundedCard(cardBackImg, px, startY, miniW, miniH, 3, "rgba(255,255,255,0.8)", 1);
             }
           }
         }

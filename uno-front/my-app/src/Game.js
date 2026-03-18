@@ -14,11 +14,12 @@ export default function Game() {
   const [hasDrawnThisTurn, setHasDrawnThisTurn] = useState(false);
   const [winner, setWinner] = useState(null);
   const [unoPenaltyMessage, setUnoPenaltyMessage] = useState(null);
+  const [botMessage, setBotMessage] = useState(null);
 
   const { state } = useLocation();
   const navigate = useNavigate();
 
-   const name = state?.name || "Player 1";
+  const name = state?.name || "Player 1";
   const playersCount = state?.playersCount || 2;
 
   const [gameState, setGameState] = useState("dealing");
@@ -91,11 +92,19 @@ export default function Game() {
       }
       currentHand = [...currentHand, ...drawnCards];
 
-      setUnoPenaltyMessage(`${name}, you forget to say UNO!»: +4 cards`);
+      setUnoPenaltyMessage(`${name}, you forgot to say UNO!: +4 cards`);
 
       setTimeout(() => {
         setUnoPenaltyMessage(null);
       }, 3500);
+    }
+
+    if (playerIndex !== 0 && currentHand.length === 1) {
+      const bName = botNames[playerIndex - 1];
+      setBotMessage(`${bName} says UNO!`);
+      setTimeout(() => {
+        setBotMessage(null);
+      }, 2500);
     }
 
     newPlayerCards[playerIndex] = currentHand;
@@ -335,6 +344,26 @@ export default function Game() {
         <h2 className="top-title">UNO</h2>
         <button className="exit-btn" onClick={() => setShowExit(true)}>Exit</button>
       </div>
+
+      {botMessage && (
+        <div style={{
+          position: "absolute",
+          top: "100px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          backgroundColor: "#FFD700",
+          color: "black",
+          padding: "10px 25px",
+          borderRadius: "30px",
+          fontWeight: "900",
+          fontSize: "18px",
+          boxShadow: "0 5px 15px rgba(0,0,0,0.4)",
+          zIndex: 50,
+          border: "2px solid white"
+        }}>
+          {botMessage}
+        </div>
+      )}
 
       <div className="board-container">
         <Table
