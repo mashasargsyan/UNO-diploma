@@ -119,8 +119,8 @@ export default function Table({ players, currentPlayer, direction, topCard, thin
       };
 
       if (cardBackImg) {
-        drawRoundedCard(cardBackImg, pileX - 4, pileY - 4, cardW, cardH, 6, "#ffffff", 1.5);
-        drawRoundedCard(cardBackImg, pileX, pileY, cardW, cardH, 6, "#ffffff", 1.5);
+        drawRoundedCard(cardBackImg, pileX - 4, pileY - 4, cardW, cardH, 6, "#000000", 1.5);
+        drawRoundedCard(cardBackImg, pileX, pileY, cardW, cardH, 6, "#000000", 1.5);
       }
 
       if (topCard && topImg) {
