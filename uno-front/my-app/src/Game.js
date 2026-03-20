@@ -104,7 +104,7 @@ export default function Game() {
       setBotMessage(`${bName} says UNO!`);
       setTimeout(() => {
         setBotMessage(null);
-      }, 2500);
+      }, 3500);
     }
 
     newPlayerCards[playerIndex] = currentHand;
