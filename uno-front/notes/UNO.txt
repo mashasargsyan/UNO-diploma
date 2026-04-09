@@ -47,3 +47,11 @@ kalodi vra click aneluc verji cardy qashi menak en depqum erb dnelu chunem u im 
 +pordzelu e(arajin patahacy) unecac qarteric dnel nranq voronq kareli e dnel, validation function
 ete kareli che qashi dimacinyy
 +qarteri dizayny voroshel 
+
+pntrel AI gorciq js-ic dimelu hamar
+a. hasarak chat vor es grem js lezvov u ed lezvov inqy patasxan ta console anem ai patasxany 
+b. json-ov info tam, jsonov patasxani
+
+ AI kam online gorciq kam serverum texadrel server kanchel
+
+tam im xaxi masin inputy (object), naxyntreli cardi suggesty stanam vor xaxam
