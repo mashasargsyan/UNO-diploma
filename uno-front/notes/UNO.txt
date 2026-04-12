@@ -55,3 +55,7 @@ b. json-ov info tam, jsonov patasxani
  AI kam online gorciq kam serverum texadrel server kanchel
 
 tam im xaxi masin inputy (object), naxyntreli cardi suggesty stanam vor xaxam
+
+
+API KEY 
+AIzaSyBTwDTO0KeUz8CS69uhepscXVXsWeUHeAg
