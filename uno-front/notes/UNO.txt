@@ -57,5 +57,3 @@ b. json-ov info tam, jsonov patasxani
 tam im xaxi masin inputy (object), naxyntreli cardi suggesty stanam vor xaxam
 
 
-API KEY 
-AIzaSyBTwDTO0KeUz8CS69uhepscXVXsWeUHeAg
